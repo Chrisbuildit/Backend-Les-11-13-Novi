@@ -6,6 +6,9 @@ import com.example.les11repositoryandentityclass.model.Teacher;
 import com.example.les11repositoryandentityclass.repository.TeacherRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class TeacherService {
 
@@ -25,6 +28,22 @@ public class TeacherService {
 
         return teacherDto;
     }
+
+    public List<TeacherDto> getAllTeachers() {
+        Iterable<Teacher> tList = repos.findAll();
+        List<TeacherDto> tDtoList = new ArrayList<>();
+
+        for(Teacher t : tList) {
+            TeacherDto teacherDto = new TeacherDto();
+            teacherDto.id = t.getId();
+            teacherDto.firstName = t.getFirstName();
+            teacherDto.lastName = t.getLastName();
+            teacherDto.dob = t.getDob();
+            tDtoList.add(teacherDto);
+        }
+        return tDtoList;
+    }
+
     public Long createTeacher(TeacherDto teacherDto) {
         Teacher teacher = new Teacher();
         teacher.setFirstName(teacherDto.firstName);

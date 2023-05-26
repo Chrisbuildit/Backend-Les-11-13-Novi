@@ -16,28 +16,26 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/teachers")
 public class TeacherController {
 
-    private final TeacherService service;
+    private final TeacherService teacherService;
 
-    public TeacherController(TeacherService service) {
-        this.service = service;
+    public TeacherController(TeacherService teacherService) {
+        this.teacherService = teacherService;
     }
-//Vervangt door bovenst. constructor
-   /* @Autowired
-    private TeacherRepository repos;
-*/
-//    @GetMapping
-//    public ResponseEntity<Iterable<Teacher>> getTeachers() {
-//        return ResponseEntity.ok(repos.findAll());
-//        }
 
     @GetMapping
-    public ResponseEntity<Object> getTeacher(@RequestParam Long Id) {
-        return ResponseEntity.ok(service.getTeacher(Id));
+    public ResponseEntity<List<TeacherDto>> getAllTeachers() {
+        return ResponseEntity.ok(teacherService.getAllTeachers());
+        }
+
+    @GetMapping("/{Id}")
+    public ResponseEntity<Object> getTeacher(@PathVariable Long Id) {
+        return ResponseEntity.ok(teacherService.getTeacher(Id));
     }
 
     @PostMapping
@@ -52,7 +50,7 @@ public class TeacherController {
             }
             return  ResponseEntity.badRequest().body(sb.toString());
         } else {
-                Long newId = service.createTeacher(teacherDto);
+                Long newId = teacherService.createTeacher(teacherDto);
                 URI uri = URI.create(ServletUriComponentsBuilder
                         .fromCurrentRequest().path("/" + newId).toUriString());
                 return ResponseEntity.created(uri).body(newId);

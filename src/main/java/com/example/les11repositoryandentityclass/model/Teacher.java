@@ -1,11 +1,10 @@
 package com.example.les11repositoryandentityclass.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="teachers")
@@ -16,6 +15,10 @@ public class Teacher {
     private String firstName;
     private String lastName;
     private LocalDate dob;
+
+    @OneToMany(mappedBy = "teacher")
+    @JsonIgnore
+    private List<Course> courses;
 
     public void setId(Long id) {
         this.id = id;
@@ -47,5 +50,13 @@ public class Teacher {
 
     public LocalDate getDob() {
         return dob;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 }
