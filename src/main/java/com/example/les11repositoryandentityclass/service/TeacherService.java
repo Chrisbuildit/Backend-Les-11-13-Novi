@@ -6,19 +6,21 @@ import com.example.les11repositoryandentityclass.model.Teacher;
 import com.example.les11repositoryandentityclass.repository.TeacherRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TeacherService {
 
-    private final TeacherRepository repos;
+    private final TeacherRepository teacherRepos;
 
-    public TeacherService(TeacherRepository repos) {
-        this.repos = repos;
+    public TeacherService(TeacherRepository teacherRepos) {
+        this.teacherRepos = teacherRepos;
     }
+
     public TeacherDto getTeacher(Long Id) {
-        Teacher t = repos.findById(Id).orElseThrow(() -> new ResourceNotFoundException("Teacher not Found"));
+        Teacher t = teacherRepos.findById(Id).orElseThrow(() -> new ResourceNotFoundException("Teacher not Found"));
 
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.id = t.getId();
@@ -30,18 +32,25 @@ public class TeacherService {
     }
 
     public List<TeacherDto> getAllTeachers() {
-        Iterable<Teacher> tList = repos.findAll();
+        Iterable<Teacher> tList = teacherRepos.findAll();
         List<TeacherDto> tDtoList = new ArrayList<>();
 
         for(Teacher t : tList) {
-            TeacherDto teacherDto = new TeacherDto();
-            teacherDto.id = t.getId();
-            teacherDto.firstName = t.getFirstName();
-            teacherDto.lastName = t.getLastName();
-            teacherDto.dob = t.getDob();
+            TeacherDto teacherDto = transferToDto(t);
             tDtoList.add(teacherDto);
         }
         return tDtoList;
+    }
+
+    public List<TeacherDto> getTeacherBefore(LocalDate date) {
+        Iterable<Teacher> tList = teacherRepos.findByDobBefore(date);
+        List<TeacherDto> teachersBefore = new ArrayList<>();
+
+        for(Teacher t : tList) {
+            TeacherDto teacherDto = transferToDto(t);
+            teachersBefore.add(teacherDto);
+        }
+        return teachersBefore;
     }
 
     public Long createTeacher(TeacherDto teacherDto) {
@@ -49,8 +58,18 @@ public class TeacherService {
         teacher.setFirstName(teacherDto.firstName);
         teacher.setLastName(teacherDto.lastName);
         teacher.setDob(teacherDto.dob);
-        repos.save(teacher);
+        teacherRepos.save(teacher);
 
         return teacher.getId();
+    }
+
+    public TeacherDto transferToDto(Teacher teacher) {
+        TeacherDto teacherDto = new TeacherDto();
+        teacherDto.id = teacher.getId();
+        teacherDto.firstName = teacher.getFirstName();
+        teacherDto.lastName = teacher.getLastName();
+        teacherDto.dob = teacher.getDob();
+
+        return teacherDto;
     }
 }

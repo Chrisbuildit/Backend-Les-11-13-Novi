@@ -35,4 +35,16 @@ public class CourseController {
     public ResponseEntity<Long> createCourse(@RequestBody CourseDto courseDto) {
         return new ResponseEntity<>(courseService.createCourse(courseDto), HttpStatus.CREATED);
     }
+
+    //Werkt niet voor teachers
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteCourse(@PathVariable Long id) {
+        courseService.deleteCourse(id);
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<CourseDto> updateCourse(@PathVariable Long id, @RequestBody CourseDto newCourse) {
+        CourseDto dto = courseService.updateCourse(id, newCourse);
+        return ResponseEntity.ok().body(dto);
+    }
 }

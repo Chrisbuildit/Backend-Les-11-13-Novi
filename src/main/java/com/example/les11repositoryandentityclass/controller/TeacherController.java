@@ -57,8 +57,8 @@ public class TeacherController {
             }
         }
 
-//    @GetMapping("/before")
-//    public ResponseEntity<Iterable<Teacher>> getTeacherBefore(@RequestParam LocalDate date) {
-//        return ResponseEntity.ok(repos.findByDobBefore(date));
-//    }
+    @GetMapping("/before")
+    public ResponseEntity<List<TeacherDto>> getTeacherBefore(@RequestParam LocalDate date) {
+        return ResponseEntity.ok(teacherService.getTeacherBefore(date));
+    }
 }
