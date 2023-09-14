@@ -25,8 +25,23 @@ public class CourseService {
         this.teacherRepos = teacherRepos;
     }
 
+    //Long version
+    public CourseDto getCourse(Long Id) {
+        Course c = courseRepos.findById(Id).orElseThrow(() -> new ResourceNotFoundException("Course not Found"));
+
+        CourseDto courseDto = new CourseDto();
+        courseDto.id = c.getId();
+        courseDto.title = c.getTitle();
+        courseDto.sp = c.getSp();
+        courseDto.teacherId = c.getTeacher().getId();
+
+        return courseDto;
+    }
+
+    //Long version - duplication of above function
     public List<CourseDto> getAllCourses() {
         Iterable<Course> cList = courseRepos.findAll();
+        //Zonder 'new ArrayList' is cToList null
         List<CourseDto> cDtoList = new ArrayList<>();
 
         for(Course c : cList) {

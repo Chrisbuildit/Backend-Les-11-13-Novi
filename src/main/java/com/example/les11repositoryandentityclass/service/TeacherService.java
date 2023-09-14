@@ -19,18 +19,14 @@ public class TeacherService {
         this.teacherRepos = teacherRepos;
     }
 
+    //Short version
     public TeacherDto getTeacher(Long Id) {
         Teacher t = teacherRepos.findById(Id).orElseThrow(() -> new ResourceNotFoundException("Teacher not Found"));
 
-        TeacherDto teacherDto = new TeacherDto();
-        teacherDto.id = t.getId();
-        teacherDto.firstName = t.getFirstName();
-        teacherDto.lastName = t.getLastName();
-        teacherDto.dob = t.getDob();
-
-        return teacherDto;
+        return transferToDto(t);
     }
 
+    //Short version
     public List<TeacherDto> getAllTeachers() {
         Iterable<Teacher> tList = teacherRepos.findAll();
         List<TeacherDto> tDtoList = new ArrayList<>();

@@ -26,17 +26,22 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+    @GetMapping("/{Id}")
+    public ResponseEntity<Object> getCourse(@PathVariable Long Id) {
+        return ResponseEntity.ok(courseService.getCourse(Id));
+    }
+
     @GetMapping
     public ResponseEntity<List<CourseDto>> getAllCourses() {
         return ResponseEntity.ok(courseService.getAllCourses());
     }
 
+    //Maakt een object aan van ResponseEntity
     @PostMapping
     public ResponseEntity<Long> createCourse(@RequestBody CourseDto courseDto) {
         return new ResponseEntity<>(courseService.createCourse(courseDto), HttpStatus.CREATED);
     }
 
-    //Werkt niet voor teachers
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteCourse(@PathVariable Long id) {
         courseService.deleteCourse(id);
